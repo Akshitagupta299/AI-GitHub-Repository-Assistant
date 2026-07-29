@@ -8,6 +8,9 @@ from app.schemas.user import UserCreate, UserResponse
 from app.security import hash_password,verify_password
 from app.auth import create_access_token, get_current_user
 
+from app.schemas.repository import RepositoryRequest
+from app.services.github_service import clone_repository
+
 router = APIRouter()
 
 @router.post("/users", response_model=UserResponse)
@@ -84,3 +87,13 @@ def read_current_user(
     current_user: User = Depends(get_current_user)
 ):
     return current_user
+
+@router.post("/analyze-repository")
+def analyze_repository(repository: RepositoryRequest):
+
+    repo_path = clone_repository(repository.repo_url)
+
+    return {
+        "message": "Repository cloned successfully.",
+        "repository_path": str(repo_path)
+    }
