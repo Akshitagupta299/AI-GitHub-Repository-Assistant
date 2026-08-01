@@ -6,7 +6,7 @@ from app.database import get_db
 from app.models.user import User
 from datetime import datetime, timedelta
 
-from app.config import settings
+from app.config.settings import settings
 
 SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = "HS256"

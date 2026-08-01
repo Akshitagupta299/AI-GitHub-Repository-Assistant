@@ -1,13 +1,27 @@
-# Python cache
+# Virtual Environment
+venv/
+
+# Environment Variables
+.env
+
+# VS Code
+.vscode/
+
+# Python Cache
 __pycache__/
 *.py[cod]
 
-# Virtual environment
-venv/
-.venv/
+# Pytest
+.pytest_cache/
 
-# Environment variables
-.env
+# Alembic Cache
+*.pyc
 
-# Cloned repositories
-Backend/repositories/
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary testing files
+test_gemini.py
+
+repositories/
