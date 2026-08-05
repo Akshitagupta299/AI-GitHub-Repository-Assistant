@@ -10,6 +10,10 @@ from app.auth import create_access_token, get_current_user
 
 from app.schemas.repository import RepositoryRequest
 from app.services.github_service import clone_repository
+from app.services.repository_reader import read_repository
+from app.services.chunking_service import create_chunks
+from app.services.embedding_service import generate_embeddings
+from app.services.vector_database import get_or_create_repository_collection, store_repository_embeddings
 
 router = APIRouter()
 
@@ -93,7 +97,20 @@ def analyze_repository(repository: RepositoryRequest):
 
     repo_path = clone_repository(repository.repo_url)
 
+    repository_data = read_repository(repo_path)
+
+    chunk_data = create_chunks(repository_data)
+
+    embedded_chunks = generate_embeddings(chunk_data)
+
+    collection = get_or_create_repository_collection(repo_path.name)
+
+    store_repository_embeddings(
+        collection,
+        embedded_chunks
+    )
+
     return {
-        "message": "Repository cloned successfully.",
-        "repository_path": str(repo_path)
+        "message": "Repository indexed successfully.",
+        "total_chunks": len(embedded_chunks)
     }

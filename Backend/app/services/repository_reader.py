@@ -30,6 +30,34 @@ IMPORTANT_FILES = {
     "Makefile"
 }
 
+def read_repository(repository_path: str):
+
+    repository_files = get_repository_files(repository_path)
+
+    repository_data = []
+
+    for file_path in repository_files:
+
+        try:
+
+            with open(file_path, "r", encoding="utf-8") as file:
+
+                content = file.read()
+
+            repository_data.append({
+                "file_path": file_path,
+                "name": os.path.basename(file_path),
+                "content": content
+            })
+
+        except Exception as e:
+
+            print(f"Could not read {file_path}: {e}")
+
+            continue
+
+    return repository_data
+
 def get_repository_files(repository_path: str):
 
     repository_files = []

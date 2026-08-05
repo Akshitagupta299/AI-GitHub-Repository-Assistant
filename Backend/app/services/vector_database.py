@@ -18,6 +18,14 @@ def get_or_create_repository_collection(repository_name: str) -> Collection:
 
     return collection
 
+def get_repository_collection(repository_name: str) -> Collection:
+    """
+    Returns an existing repository collection.
+
+    Raises an error if the repository has not been indexed.
+    """
+
+    return client.get_collection(name=repository_name)
 
 def store_repository_embeddings(
     collection: Collection,
