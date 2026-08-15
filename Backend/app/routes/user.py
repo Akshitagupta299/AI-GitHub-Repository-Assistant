@@ -9,7 +9,7 @@ from app.security import hash_password,verify_password
 from app.auth import create_access_token, get_current_user
 
 from app.schemas.repository import RepositoryRequest
-from app.services.github_service import clone_repository
+from app.services.github_service import (clone_repository,get_repository_metadata,)
 from app.services.repository_reader import read_repository
 from app.services.chunking_service import create_chunks
 from app.services.embedding_service import generate_embeddings
@@ -95,22 +95,45 @@ def read_current_user(
 @router.post("/analyze-repository")
 def analyze_repository(repository: RepositoryRequest):
 
-    repo_path = clone_repository(repository.repo_url)
+    repo_path = clone_repository(
+        repository.repo_url
+    )
 
-    repository_data = read_repository(repo_path)
+    repository_data = read_repository(
+        repo_path
+    )
 
-    chunk_data = create_chunks(repository_data)
+    chunk_data = create_chunks(
+        repository_data
+    )
 
-    embedded_chunks = generate_embeddings(chunk_data)
+    embedded_chunks = generate_embeddings(
+        chunk_data
+    )
 
-    collection = get_or_create_repository_collection(repo_path.name)
+    collection = get_or_create_repository_collection(
+        repo_path.name
+    )
 
     store_repository_embeddings(
         collection,
         embedded_chunks
     )
 
+    # Get repository metadata
+    metadata = get_repository_metadata(
+        repo_path
+    )
     return {
-        "message": "Repository indexed successfully.",
-        "total_chunks": len(embedded_chunks)
+
+        "repository_name": repo_path.name,
+
+        "chunk_count": len(chunk_data),
+
+        "language": metadata["language"],
+
+        "branch": metadata["branch"],
+
+        "license": metadata["license"],
+
     }

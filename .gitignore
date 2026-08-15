@@ -24,4 +24,8 @@ Thumbs.db
 # Temporary testing files
 test_gemini.py
 
+# Cloned repositories
 repositories/
+
+# ChromaDB
+chroma_db/

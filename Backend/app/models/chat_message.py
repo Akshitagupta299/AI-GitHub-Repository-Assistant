@@ -1,12 +1,12 @@
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
 from app.database import Base
 
 
-class User(Base):
-    __tablename__ = "users"
+class ChatMessage(Base):
+    __tablename__ = "chat_messages"
 
     id = Column(
         Integer,
@@ -14,24 +14,19 @@ class User(Base):
         index=True
     )
 
-    username = Column(
+    session_id = Column(
+        Integer,
+        ForeignKey("chat_sessions.id"),
+        nullable=False
+    )
+
+    role = Column(
         String,
         nullable=False
     )
 
-    email = Column(
-        String,
-        unique=True,
-        nullable=False
-    )
-
-    github_id = Column(
-        String,
-        unique=True
-    )
-
-    hashed_password = Column(
-        String,
+    content = Column(
+        Text,
         nullable=False
     )
 
@@ -40,8 +35,7 @@ class User(Base):
         default=datetime.utcnow
     )
 
-    chat_sessions = relationship(
+    session = relationship(
         "ChatSession",
-        back_populates="user",
-        cascade="all, delete-orphan"
+        back_populates="messages"
     )

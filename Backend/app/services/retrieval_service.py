@@ -1,6 +1,7 @@
 from sentence_transformers import SentenceTransformer
 from chromadb.api.models.Collection import Collection
 
+
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
 
@@ -14,7 +15,9 @@ def retrieve_relevant_chunks(
     for the user's question.
     """
 
-    question_embedding = model.encode(question).tolist()
+    question_embedding = model.encode(
+        question
+    ).tolist()
 
     results = collection.query(
         query_embeddings=[question_embedding],
