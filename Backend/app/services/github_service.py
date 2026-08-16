@@ -2,7 +2,10 @@ from git import Repo
 from pathlib import Path
 import re
 
-REPOSITORIES_DIR = Path("repositories")
+from app.config.settings import settings
+
+
+REPOSITORIES_DIR = Path(settings.REPOSITORIES_PATH)
 
 
 def validate_github_url(repo_url: str):

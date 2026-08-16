@@ -2,9 +2,13 @@ import chromadb
 from chromadb.api.models.Collection import Collection
 from typing import List
 
-# Create one persistent client for the whole application
-client = chromadb.PersistentClient(path="chroma_db")
+from app.config.settings import settings
 
+
+# Create one persistent client for the whole application
+client = chromadb.PersistentClient(
+    path=settings.CHROMA_DB_PATH
+)
 
 def get_or_create_repository_collection(repository_name: str) -> Collection:
     """
